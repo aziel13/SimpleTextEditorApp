@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTextEditor", "SimpleTextEditor\SimpleTextEditor.csproj", "{AB9BBEBA-4472-4416-BCD9-BEF14BFB5A91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTextEditorUnitTests", "..\SimpleTextEditorAppUnitTests\SimpleTextEditorUnitTests\SimpleTextEditorUnitTests.csproj", "{07FEE356-3C8E-49F3-92AE-1A65016B8EF3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AB9BBEBA-4472-4416-BCD9-BEF14BFB5A91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB9BBEBA-4472-4416-BCD9-BEF14BFB5A91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB9BBEBA-4472-4416-BCD9-BEF14BFB5A91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB9BBEBA-4472-4416-BCD9-BEF14BFB5A91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07FEE356-3C8E-49F3-92AE-1A65016B8EF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07FEE356-3C8E-49F3-92AE-1A65016B8EF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07FEE356-3C8E-49F3-92AE-1A65016B8EF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07FEE356-3C8E-49F3-92AE-1A65016B8EF3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

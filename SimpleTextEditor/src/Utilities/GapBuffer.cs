@@ -1,13 +1,18 @@
 ﻿namespace SimpleTextEditor.Utilities;
 
-public class GapBuffer<T>
+
+
+public class GapBuffer
 {
     private int _capacity;
-    private T[] _buffer;
+    private char[] _buffer;
     private int _gapStart;
     private int _gapEnd;
     
-    public T[] Buffer => _buffer;
+    private int _gapLength => _gapEnd - _gapStart;
+    private int _contentLength => _capacity - _gapLength;
+    
+    public char[] Buffer => _buffer;
     
     public int Capacity => _capacity;
     public int GapStart => _gapStart;
@@ -16,34 +21,93 @@ public class GapBuffer<T>
     public GapBuffer(int capacity) {
         
         _capacity = capacity;
-        _buffer = new T[_capacity];
+        _buffer = new char[_capacity];
         _gapStart = 0;
         _gapEnd = _capacity - 1;
         
     }
 
-    public void Insert(T input)
+    public void Insert(char input)
     {
         if (_gapStart == _gapEnd)
         {
-            GrowBuffer();
+            GrowBuffer(1);
+        }
+ 
+        
+        _buffer[_gapStart] = input;
+    
+        _gapStart++;            
+        
+    }
+    public void Insert(string input)
+    {
+        if (_gapStart == _gapEnd)
+        {
+            GrowBuffer(input.Length);
+        }
+        
+        char[] inputToCharArray = input.ToCharArray();
+
+        foreach (char thisChar in inputToCharArray)
+        {
+           Insert(thisChar); 
+        }
+    }
+    public void Insert(string[] input)
+    {
+
+        int neededLength = 0;
+        
+        foreach (string s in input)
+        {
+
+            neededLength += s.Length;
+
         }
 
-        _buffer[_gapStart] = input;
+        if (_gapStart == _gapEnd)
+        {
+            GrowBuffer(input.Length);
+        }
         
-        _gapStart++;
-    }
+        foreach (string s in input)
+        {
+            char[] inputToCharArray = s.ToCharArray();
 
-    public void GrowBuffer() {
+            foreach (char thisChar in inputToCharArray)
+            {
+                Insert(s);
+            }            
+        }
+    }
+    public void Insert(char[] input)
+    {
+        if (_gapStart == _gapEnd)
+        {
+         GrowBuffer(input.Length);
+        }
+        
+        char[] inputToCharArray = input;
+
+        foreach (char thisChar in inputToCharArray)
+        {
+              Insert(thisChar);
+        }
+        
+    }
+    
+    public void GrowBuffer(int requiredSpace) {
         
         
-        int new_capacity =  _capacity * 2;
+        int new_capacity =  Math.Max(  _capacity * 2 , _contentLength + requiredSpace);
+        
         if (new_capacity > 0)
         {
 
-            T[] newBuffer = new T[new_capacity];
+            char[] newBuffer = new char[new_capacity];
             
-            /*
+            
             for (int i = 0; i < GapStart; i++)
             {
                 newBuffer[i] = _buffer[i];
@@ -51,13 +115,67 @@ public class GapBuffer<T>
             for (int i = GapEnd+1; i < _capacity; i++)
             {
                 newBuffer[i] = _buffer[i];
-            }*/
-
-
+            }
+            _gapEnd += _capacity;
             _capacity = new_capacity;
             _buffer = newBuffer;
+           
         }
 
+    }
+
+    public void LeftHandRemove(int dist = 1)
+    {
+        if(dist > GapStart) 
+        {
+            throw new Exception($"Distance:{dist} is greater than {GapStart}");
+        }
+        
+        _gapStart -= dist;
+    }
+
+    public void RightHandRemove()
+    {
+        
+    }
+
+    public void MoveGap(int index)
+    {
+        string bufferBeforeMove = string.Empty;
+       
+        Console.WriteLine($"Buffer Before GapMove: {bufferBeforeMove}");
+        if (_gapStart > index)
+        {
+
+            while (_gapStart > index)
+            {
+                _gapStart--;
+                
+                _gapEnd--;
+
+                
+                
+                _buffer[_gapEnd] = _buffer[_gapStart];
+             
+
+            }
+            
+            
+        } else if (index > _gapStart)
+
+        {
+            
+            _gapStart++;
+            
+            if (_gapEnd < _contentLength-1)
+                _gapEnd++;
+
+            _buffer[_gapStart] = _buffer[_gapEnd];
+            
+        }
+        
+        string bufferAfterMove = string.Empty;
+       
     }
 
 

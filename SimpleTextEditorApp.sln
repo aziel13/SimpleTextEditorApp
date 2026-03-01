@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTextEditor", "SimpleT
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTextEditorUnitTests", "..\SimpleTextEditorAppUnitTests\SimpleTextEditorUnitTests\SimpleTextEditorUnitTests.csproj", "{07FEE356-3C8E-49F3-92AE-1A65016B8EF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsAppTutorial", "..\SimpleTextEditorWinForms\WinFormsAppTutorial.csproj", "{26D66EF1-1996-4D14-B3FE-6BE999C54E07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTextEditorAppWinForms", "..\SimpleTextEditorWinForms\SimpleTextEditorAppWinForms.csproj", "{26D66EF1-1996-4D14-B3FE-6BE999C54E07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

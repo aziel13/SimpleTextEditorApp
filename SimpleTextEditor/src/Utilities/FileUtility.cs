@@ -8,7 +8,16 @@ public class FileUtility
     {
         
     }
+    
+    public void readDataFromFile(Stream stream)
+    {
+        
+    }
 
+    public void writeDataToFile(Stream stream)
+    {
+        
+    }
 
 
 }

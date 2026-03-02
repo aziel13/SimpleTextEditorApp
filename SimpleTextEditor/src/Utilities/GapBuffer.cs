@@ -77,9 +77,10 @@ public class GapBuffer
 
             foreach (char thisChar in inputToCharArray)
             {
-                Insert(s);
+                Insert(thisChar);
             }            
         }
+        
     }
     public void Insert(char[] input)
     {
@@ -134,9 +135,14 @@ public class GapBuffer
         _gapStart -= dist;
     }
 
-    public void RightHandRemove()
+    public void RightHandRemove(int dist = 1)
     {
+        if (dist > GapEnd)
+        {
+            throw new Exception($"Distance:{dist} is greater than {GapEnd}");
+        }
         
+        _gapEnd += dist;
     }
 
     public void MoveGap(int index)

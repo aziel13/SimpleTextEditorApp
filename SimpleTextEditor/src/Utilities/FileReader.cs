@@ -3,13 +3,6 @@ using System.IO;
     
 public class FileReader : IFileReader
 {
-    
-    
-    public FileReader()
-    {
-        
-    }
-
     public bool FileExists(string fileName)
     {
         return File.Exists(fileName);
@@ -17,11 +10,11 @@ public class FileReader : IFileReader
 
     public string ReadDataFromFile(string path)
     {
-        throw new NotImplementedException();
+        return  File.ReadAllText(path);
     }
 
-    public Stream GetStream(string fileName)
+    public Stream OpenReadStream(string fileName)
     {
-        throw new NotImplementedException();
+        return new FileStream(fileName, FileMode.Open, FileAccess.Read);
     }
 }

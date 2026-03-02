@@ -6,14 +6,27 @@ public class FileManager
 
     private readonly IFileReader _FileReader;
     
-    public FileManager(IFileReader fileReader)
+    private readonly IFileWriter _FileWriter;
+
+    public FileManager(IFileReader? fileReader,IFileWriter? fileWriter)
     {
         _FileReader =  fileReader;
+        _FileWriter = fileWriter;
     }
 
     public bool FileExists(string fileName)
     {
-        return _FileReader.FileExists(fileName);
+        if (_FileReader != null)
+        {
+            return _FileReader.FileExists(fileName);
+        } 
+        
+        if (_FileWriter != null)
+        {
+            return _FileWriter.FileExists(fileName);
+        }
+        
+        return false;
     }
 
     public string ReadDataFromFile(string path)
@@ -25,15 +38,31 @@ public class FileManager
 
     }
 
-    public Stream GetStream(string fileName)
+    public Stream OpenReadStream(string fileName)
     {
-        return _FileReader.GetStream(fileName);
+        return _FileReader.OpenReadStream(fileName);
     }
 
-    public void writeDataToFile(Stream stream)
+    public void WriteDataToFile(String path, string content)
     {
-        
+        if (!FileExists(path))
+        {
+            _FileWriter.WriteDataToFile(path, content);
+        }
     }
-
+    public void WriteDataToFile(String path, string[] content)
+    {
+        if (!FileExists(path))
+        {
+            _FileWriter.WriteDataToFile(path, content);
+        }
+    }
+    public void StreamWriteDataToFile(String path, string content)
+    {
+        if (!FileExists(path))
+        {
+            _FileWriter.StreamWriteDataToFile(path, content);
+        }
+    }
 
 }

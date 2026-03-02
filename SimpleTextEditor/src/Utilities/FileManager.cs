@@ -1,17 +1,33 @@
 ﻿namespace SimpleTextEditor.Utilities;
 using System.IO;
 
-public class FileUtility
+public class FileManager 
 {
 
-    public FileUtility()
-    {
-        
-    }
+    private readonly IFileReader _FileReader;
     
-    public void readDataFromFile(Stream stream)
+    public FileManager(IFileReader fileReader)
     {
+        _FileReader =  fileReader;
+    }
+
+    public bool FileExists(string fileName)
+    {
+        return _FileReader.FileExists(fileName);
+    }
+
+    public string ReadDataFromFile(string path)
+    {
+        if (!FileExists(path))
+            return "File not found";
         
+        return _FileReader.ReadDataFromFile(path);
+
+    }
+
+    public Stream GetStream(string fileName)
+    {
+        return _FileReader.GetStream(fileName);
     }
 
     public void writeDataToFile(Stream stream)

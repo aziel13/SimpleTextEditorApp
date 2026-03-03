@@ -159,16 +159,11 @@ public class GapBuffer
                 
                 _gapEnd--;
 
-                
-                
                 _buffer[_gapEnd] = _buffer[_gapStart];
-             
 
             }
             
-            
         } else if (index > _gapStart)
-
         {
             
             _gapStart++;

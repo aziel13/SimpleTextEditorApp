@@ -50,6 +50,7 @@ public class FileManager
             _FileWriter.WriteDataToFile(path, content);
         }
     }
+    
     public void WriteDataToFile(String path, string[] content)
     {
         if (!FileExists(path))
@@ -57,6 +58,7 @@ public class FileManager
             _FileWriter.WriteDataToFile(path, content);
         }
     }
+    
     public void StreamWriteDataToFile(String path, string content)
     {
         if (!FileExists(path))

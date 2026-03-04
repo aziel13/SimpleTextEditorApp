@@ -2,7 +2,7 @@
 
 namespace SimpleTextEditor;
 
-public class TextData
+public class TextData 
 {        
     private GapBuffer _gapBuffer;
     public GapBuffer GapBuffer => _gapBuffer;

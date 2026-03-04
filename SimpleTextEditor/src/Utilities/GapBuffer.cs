@@ -179,5 +179,14 @@ public class GapBuffer
        
     }
 
+    public override String ToString()
+    {
+       string result = "";
+       
+       
+       return result;
+
+    }
+
 
 }

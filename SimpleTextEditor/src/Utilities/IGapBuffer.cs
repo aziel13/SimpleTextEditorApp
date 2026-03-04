@@ -12,4 +12,6 @@ public interface IGapBuffer
     public void RightHandRemove(int dist = 1);
     public void MoveGap(int index);
     
+    public String ToString();
+    
 }

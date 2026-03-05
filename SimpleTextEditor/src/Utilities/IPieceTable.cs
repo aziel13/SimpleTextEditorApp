@@ -3,8 +3,8 @@
 public interface IPieceTable
 {
     
-    void insertText(string text);
-    void deleteText(string text);
+    void insertText(int index,string text);
+    void deleteText(int index, string text);
     string getText();
 
 }

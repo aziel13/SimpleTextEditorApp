@@ -111,13 +111,28 @@ public class PieceTableDataStructure : IPieceTable
         {
 
             int stringLengthSofar = 0;
+            int originBufferSofar = 0;
+            int addBufferSofar = 0;
+            int priorAddlength = -1;
+            int priorOriginLength = -1;
             
+                
             for (int i = 0; i < _pieceTable.pieces.Count ; i++)
             {
 
                 Piece thisPiece = _pieceTable.pieces[i];
                 
                 stringLengthSofar += thisPiece.Length;
+                
+                if (thisPiece.Source == PieceEnum.ORIGINAL)
+                {
+                    originBufferSofar +=  thisPiece.Length;
+                }
+                else
+                {
+                    addBufferSofar += thisPiece.Length;
+                }
+                
                 if (index == stringLengthSofar)
                 {
                     
@@ -151,28 +166,32 @@ public class PieceTableDataStructure : IPieceTable
                         }
                         else
                         {
-                            int relativeIndex = stringLengthSofar - (index);
+                            //int relativeIndex = stringLengthSofar - (index);
+                           // int relativeIndex = addBufferSofar;
+                            int relativeIndex = index - originBufferSofar;
+                            
                             int indexAfterNewAddition = relativeIndex + text.Length;
+                        //    Console.WriteLine($"index: {index} relativeIndex {relativeIndex} addBufferSofar: {addBufferSofar} originBufferSofar: {originBufferSofar} thisPiece.Length: {thisPiece.Length} priorAddlength {priorAddlength}");
                             
-                            Console.WriteLine($"relativeIndex: {relativeIndex} + text.length = index at end of new add {indexAfterNewAddition} after length { thisPiece.Length - relativeIndex}"); 
+                            beforeLength = relativeIndex;
 
-                           
-                            // Console.WriteLine($"stringLengthSofar-index: {stringLengthSofar-index-1}");
-                            
-                            Console.WriteLine($"index: {index}");
-
-                            
-                            beforeLength = relativeIndex; 
+                         
                             afterLength =  thisPiece.Length - relativeIndex;
                             afterIndex = beforeLength;
                             
+                            if (priorAddlength != -1)
+                            {
+                                beforeLength -= priorAddlength;
+                                afterLength += priorAddlength;
+                            }
+
                         }
                     } 
                     
-                    Console.WriteLine($"beforeLength: {beforeLength}");
+                 //   Console.WriteLine($"beforeLength: {beforeLength}");
                     
-                    Console.WriteLine($"afterLength: {afterLength}");
-                    Console.WriteLine($"_pieceTable.pieces[i].Length: {_pieceTable.pieces[i].Length}");
+                 //   Console.WriteLine($"afterLength: {afterLength}");
+                  //  Console.WriteLine($"_pieceTable.pieces[i].Length: {_pieceTable.pieces[i].Length}");
                     
                     
                     Piece beforePiece = new Piece(beforeIndex , beforeLength, _pieceTable.pieces[i].Source);;
@@ -186,10 +205,38 @@ public class PieceTableDataStructure : IPieceTable
                     break;
                 }
             
+                if (thisPiece.Source == PieceEnum.ORIGINAL)
+                {
+                    if (priorOriginLength == -1)
+                    {
+                        priorOriginLength = thisPiece.Length;
+                    }
+                    else
+                    {
+                        priorOriginLength += thisPiece.Length;
+                    }
+
+                   
+                    
+                    
+                }
+                else
+                {
+                    if (priorAddlength == -1)
+                    {
+                        priorAddlength = thisPiece.Length;
+                    }
+                    else
+                    {
+                        priorAddlength += thisPiece.Length;
+                    }
+                }
+                
             }
             
         }
         
+       
 
         _pieceTable.addBuffer += text;
 

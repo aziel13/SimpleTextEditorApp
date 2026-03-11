@@ -250,7 +250,12 @@ public class PieceTableDataStructure : IPieceTable
         int addBufferSofar = 0;
         List<Piece> piecesTablePiecesListDeepCopy =  ListUtilities.ListDeepCopy(_pieceTable.pieces);
 
-        if (fromIndex <= getText().Length - 1)
+        string thisText = getText();
+        int thisTextLength = getText().Length;
+        
+        int adjustedFromIndex = fromIndex;
+         
+        if (adjustedFromIndex <= getText().Length - 1)
         {
             
             for (int i = 0; i < _pieceTable.pieces.Count; i++)
@@ -268,7 +273,7 @@ public class PieceTableDataStructure : IPieceTable
                     addBufferSofar += thisPiece.Length;
                 }
                 
-                if (fromIndex < stringLengthSofar)
+                if (adjustedFromIndex < stringLengthSofar)
                 {
 
                     // if stringLength is now greater than the fromIndex the delete region starts with this piece.
@@ -277,7 +282,7 @@ public class PieceTableDataStructure : IPieceTable
                     if (toIndex < thisPiece.Length + 1)
                     {
                         //if from index and start are the same only at most one new piece needs be made 
-                        if (fromIndex == thisPiece.Start)
+                        if (adjustedFromIndex == thisPiece.Start)
                         {
                             //if the delete spans the entire piece, we can just remove it.
                             if (toIndex == thisPiece.Length)
@@ -301,8 +306,6 @@ public class PieceTableDataStructure : IPieceTable
                         {
                             if (toIndex == thisPiece.Length)
                             {
-
-
                                 int newLength = fromIndex;
                                 
                                 Piece adjustedPiece = new Piece(thisPiece.Start, newLength, thisPiece.Source);
@@ -314,9 +317,7 @@ public class PieceTableDataStructure : IPieceTable
                             }
                             else
                             {
-                            
-                                
-                                int beforeLength = fromIndex;
+                                int beforeLength = adjustedFromIndex;
                                 int afterLength = this.getText().Length - toIndex;
                                 
                                 Piece beforePiece = new Piece(thisPiece.Start, beforeLength, thisPiece.Source);
@@ -325,26 +326,140 @@ public class PieceTableDataStructure : IPieceTable
                                 piecesTablePiecesListDeepCopy.RemoveAt(i);
                                 piecesTablePiecesListDeepCopy.Insert(i, beforePiece);
                                 piecesTablePiecesListDeepCopy.Insert(i+1, afterPiece);
-                            
+                                
+                               
                             }
-                        }
-
-
-                        //Piece beforePiece = new Piece(thisPiece.Start , fromIndex, _pieceTable.pieces[i].Source);
-                        
-                       
-                        
+                        } 
                     }
                     else
                     {
-                        throw new NotImplementedException("Deletes that span over multiple pieces has not been implemented");
-                    }
+                        
+                        
+                        //find the other pieces that make up this delete
+                        int thisPieceIndex = thisPiece.Start;
+                        
+                        int thisPieceLength = fromIndex - originBufferSofar;
 
+                        if (thisPiece.Source == PieceEnum.ORIGINAL)
+                        {
+                            thisPieceLength = adjustedFromIndex - addBufferSofar;
+                        }
+                        else
+                        {
+                            thisPieceLength = adjustedFromIndex - originBufferSofar;
+                        }
+
+                        int breakhere = 0;
+                    
+                        Piece thisAdjustedPiece = new Piece(thisPieceIndex,thisPieceLength, thisPiece.Source);
+
+                        stringLengthSofar -= thisPiece.Length;
+                        stringLengthSofar += thisAdjustedPiece.Length;
+                        piecesTablePiecesListDeepCopy.RemoveAt(i);
+                        piecesTablePiecesListDeepCopy.Insert(i, thisAdjustedPiece);
+                        
+                        adjustedFromIndex = stringLengthSofar;
+
+                        List<Piece> otherPieces = getFuturePieces(i+1,toIndex);
+                        
+                        int localAddBufferSofar = addBufferSofar;
+                        int localOriginBufferSofar = originBufferSofar;
+                        int index = i+1;
+                        
+                        for (int x = 0; x < otherPieces.Count; x++)
+                        {
+                            PieceEnum localSource =  otherPieces[x].Source;
+                            int startIndex = 0;
+                            int otherLength = 0;
+                            
+                            if (otherPieces[x].Source == PieceEnum.ORIGINAL)
+                            {
+                                localOriginBufferSofar += otherPieces[x].Length;
+                               
+                            }
+                            else
+                            {
+                                localAddBufferSofar += otherPieces[x].Length;
+                            }
+
+                            stringLengthSofar += piecesTablePiecesListDeepCopy[index].Length;
+
+                            if (toIndex <  stringLengthSofar)
+                            {
+                                
+                                if (otherPieces[x].Source == PieceEnum.ORIGINAL)
+                                {
+                                    startIndex = toIndex - addBufferSofar - piecesTablePiecesListDeepCopy[index].Start + originBufferSofar;
+                                    otherLength = _pieceTable.originalBuffer.Length-startIndex;
+                                }
+                                else
+                                {
+                                    startIndex = toIndex - originBufferSofar - piecesTablePiecesListDeepCopy[index].Start + addBufferSofar ;
+                                    otherLength = _pieceTable.addBuffer.Length-startIndex;
+                                }
+                                
+                                string addBuffer = _pieceTable.addBuffer;
+                                int addBufferLength = _pieceTable.addBuffer.Length;
+                                
+                                Piece lastAdjustedPiece = new Piece(startIndex,otherLength, localSource);
+
+                                string thisOrg = _pieceTable.originalBuffer;
+                                int thisOrgLength = thisOrg.Length;
+                                
+                                string adjThisOrg = thisOrg.Substring(startIndex, otherLength);
+                                
+                                piecesTablePiecesListDeepCopy.RemoveAt(index);
+                                piecesTablePiecesListDeepCopy.Insert(index, lastAdjustedPiece);
+                                
+                            }
+                            else
+                            {
+                                piecesTablePiecesListDeepCopy.RemoveAt(index);
+                                index--;
+                            }
+
+                            index++;
+                        }
+                        
+                        break;
+                    }
                 } 
             }
         }
         _pieceTable.pieces = piecesTablePiecesListDeepCopy;
     }
+
+    public List<Piece> getFuturePieces(int currentStart,int toIndex)
+    {
+        int endIndex = 0;
+        int startIndex = 0;
+        
+        int localIndex = 0;
+        
+        List<Piece> futurePieces = new List<Piece>();
+
+        int index = currentStart;
+        
+        while ( index < _pieceTable.pieces.Count)
+        {
+
+            endIndex += _pieceTable.pieces[index].Length;
+            
+            futurePieces.Add(_pieceTable.pieces[index]);
+            
+            if ( endIndex > toIndex)
+            {
+                break;
+            }
+
+            
+            startIndex = endIndex;
+            index++;
+        }
+
+        return futurePieces;
+    }
+
 
     public string getText()
     {

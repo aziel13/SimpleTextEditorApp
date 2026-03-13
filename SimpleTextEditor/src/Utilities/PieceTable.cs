@@ -150,9 +150,9 @@ public class PieceTableDataStructure : IPieceTable
                     
                     if ((_pieceTable.pieces[i].Source == PieceEnum.ORIGINAL && _pieceTable.originalBuffer.Length > index)) 
                     {
-                        beforeLength = index;
+                        beforeLength = index - addBufferSofar - thisPiece.Start;
                         afterLength = _pieceTable.pieces[i].Length - beforeLength;
-                        afterIndex = beforeLength;
+                        afterIndex = index - addBufferSofar;
                     }
                     else
                     {
@@ -165,26 +165,33 @@ public class PieceTableDataStructure : IPieceTable
                         }
                         else
                         {
+                            
                             //int relativeIndex = stringLengthSofar - (index);
                            // int relativeIndex = addBufferSofar;
-                            int relativeIndex = index - originBufferSofar;
+                           Console.WriteLine("index full text"+ index);
+                           Console.WriteLine("text length sofar"+getText().Length);
+                           Console.WriteLine("text length: "+text.Length);
+                           Console.WriteLine("originSofar: "+originBufferSofar);
+                           Console.WriteLine("addsofar: " + addBufferSofar);
+                           Console.WriteLine("priorAddlength: " + priorAddlength);
+                           
+                           beforeLength = index - originBufferSofar;//- thisPiece.Start;
                             
-                            int indexAfterNewAddition = relativeIndex + text.Length;
-                        //    Console.WriteLine($"index: {index} relativeIndex {relativeIndex} addBufferSofar: {addBufferSofar} originBufferSofar: {originBufferSofar} thisPiece.Length: {thisPiece.Length} priorAddlength {priorAddlength}");
+                            afterLength =  thisPiece.Length - beforeLength;
                             
-                            beforeLength = relativeIndex;
-
-                         
-                            afterLength =  thisPiece.Length - relativeIndex;
-                            afterIndex = beforeLength;
+                            afterIndex = index - originBufferSofar;
                             
                             if (priorAddlength != -1)
                             {
                                 beforeLength -= priorAddlength;
                                 afterLength += priorAddlength;
                             }
+                            Console.WriteLine("beforeLength: "+beforeLength);
+                            Console.WriteLine("afterLength: " + afterLength);
 
                         }
+
+                        int bk0;
                     } 
                     
                  //   Console.WriteLine($"beforeLength: {beforeLength}");
@@ -200,6 +207,7 @@ public class PieceTableDataStructure : IPieceTable
                     piecesTablePiecesListDeepCopy.Insert(i, beforePiece);
                     piecesTablePiecesListDeepCopy.Insert(i+1, newPiece);
                     piecesTablePiecesListDeepCopy.Insert(i+2, afterPiece);
+                    int breakhere;
                     
                     break;
                 }
